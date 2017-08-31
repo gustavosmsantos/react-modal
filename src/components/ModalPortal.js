@@ -193,13 +193,14 @@ export default class ModalPortal extends Component {
   }
 
   handleKeyDown = event => {
-    if (event.keyCode === TAB_KEY) {
-      scopeTab(this.content, event);
-    }
-    if (event.keyCode === ESC_KEY) {
-      event.preventDefault();
-      this.requestClose(event);
-    }
+      if (event.keyCode === TAB_KEY) {
+        scopeTab(this.content, event);
+      } else if (event.keyCode === ESC_KEY) {
+        event.preventDefault();
+        this.requestClose(event);
+      } else if (this.ownerHandlesKeyDown()) {
+        this.props.handleKeyDown(event);
+      }
   }
 
   handleOverlayOnClick = event => {
@@ -230,6 +231,9 @@ export default class ModalPortal extends Component {
 
   ownerHandlesClose = () =>
     this.props.onRequestClose;
+
+  ownerHandlesKeyDown = () =>
+    this.props.handleKeyDown;
 
   shouldBeClosed = () =>
     !this.state.isOpen && !this.state.beforeClose;
